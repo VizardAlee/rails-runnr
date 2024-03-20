@@ -1,10 +1,10 @@
-<%= form_with(model: [:admin, admin_product], class: "contents") do |form| %>
-  <% if admin_product.errors.any? %>
+<%= form_with(model: [:admin, @admin_product], class: "contents") do |form| %>
+  <% if @admin_product.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
       <h2><%= pluralize(admin_product.errors.count, "error") %> prohibited this admin_product from being saved:</h2>
 
       <ul>
-        <% admin_product.errors.each do |error| %>
+        <% @admin_product.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
@@ -22,8 +22,8 @@
   </div>
 
   <div class="my-5">
-    <% if admin_product.images.any?%>
-      <% admin_product.images.each do |image| %>
+    <% if @admin_product.images.any?%>
+      <% @admin_product.images.each do |image| %>
         <%= image_tag image, class: "w-20 h-20 object-cover rounded-md" %>
       <% end %>
     <% end %>
@@ -46,11 +46,14 @@
     <%= form.check_box :active, class: "block mt-2 h-5 w-5" %>
   </div>
 
-  <div class="my-5">
-    <%= link_to 'Product stock', admin_product_product_stocks_path(admin_product), class: 'underline' %>
-  </div>
+  <% if @admin_product.persisted? %> 
+    <%=link_to "Product Stock", admin_product_product_stocks_path(@admin_product, @admin_product.product_stocks.first) %>
+  <% else %>
+    <span class="underline">Product stocks (available after saving)</span>
+  <% end %>
 
   <div class="inline">
     <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
   </div>
+
 <% end %>

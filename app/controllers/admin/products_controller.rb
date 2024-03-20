@@ -8,8 +8,16 @@ class Admin::ProductsController < AdminController
 
   # GET /admin/products/1 or /admin/products/1.json
   def show
-  end
+    @product = Product.find(params[:product_id]) 
+    @product_stock = @product.product_stocks.find_by(id: params[:id]) # Use find_by
 
+    if @product_stock
+      # Render the show page 
+    else
+      redirect_to admin_product_product_stocks_path(@product), notice: "Product stock not found."
+    end
+  end
+  
   # GET /admin/products/new
   def new
     @admin_product = Product.new
@@ -21,18 +29,18 @@ class Admin::ProductsController < AdminController
 
   # POST /admin/products or /admin/products.json
   def create
-    @admin_product = Product.new(admin_product_params)
-
+    @admin_product = Product.new(admin_product_params) 
+  
     respond_to do |format|
       if @admin_product.save
-        format.html { redirect_to admin_product_url(@admin_product), notice: "Product was successfully created." }
+        format.html { redirect_to admin_product_product_stocks_path(@admin_product), notice: "Product was successfully created." } 
         format.json { render :show, status: :created, location: @admin_product }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @admin_product.errors, status: :unprocessable_entity }
       end
     end
-  end
+  end 
 
   # PATCH/PUT /admin/products/1 or /admin/products/1.json
   def update

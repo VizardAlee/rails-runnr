@@ -19,9 +19,16 @@ class Admin::ProductStocksController < AdminController
 
   # GET /admin/product_stocks/1/edit
   def edit 
-    @product = Product.find(params[:product_id])
-    @admin_product_stock = ProductStock.find(params[:id])
+    @product = Product.includes(:product_stocks).find(params[:product_id])
+    @product_stock = @product.product_stocks.find_by(id: params[:id]) 
+  
+    if @product_stock
+      render :edit
+    else
+      redirect_to admin_product_product_stocks_path(@product), notice: "Product stock not found."
+    end
   end
+  
 
   # POST /admin/product_stocks or /admin/product_stocks.json
   def create
