@@ -4,5 +4,5 @@ class Product < ApplicationRecord
   end
   
   belongs_to :category
-  has_many :product_stocks
+  has_many :product_stocks, dependent: :destroy
 end

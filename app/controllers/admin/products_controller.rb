@@ -8,7 +8,7 @@ class Admin::ProductsController < AdminController
 
   # GET /admin/products/1 or /admin/products/1.json
   def show
-    @product = Product.find(params[:product_id]) 
+    @product = Product.find(params[:id]) 
     @product_stock = @product.product_stocks.find_by(id: params[:id]) # Use find_by
 
     if @product_stock
@@ -59,6 +59,7 @@ class Admin::ProductsController < AdminController
 
   # DELETE /admin/products/1 or /admin/products/1.json
   def destroy
+    @admin_product.product_stocks.destroy_all
     @admin_product.destroy!
 
     respond_to do |format|
