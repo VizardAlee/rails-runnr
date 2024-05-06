@@ -1,3 +1,5 @@
+# Rails.logger.debug Rails.backtrace_cleaner.clean(Rails.application.backtrace_cleaner.filter_gem_from_backtrace("railties")) 
+
 require_relative "boot"
 
 require "rails/all"
