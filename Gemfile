@@ -85,3 +85,5 @@ gem 'rest-client'
 
 
 gem "pagy", "~> 8.1"
+
+gem "aws-sdk-s3", "~> 1.149"
