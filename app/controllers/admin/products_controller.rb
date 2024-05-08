@@ -52,14 +52,21 @@ class Admin::ProductsController < AdminController
     if @admin_product.update(admin_product_params.reject { |k| k['images']})
       if admin_product_params['images']
         admin_product_params['images'].each do |image|
-          @admin_product.images.attach(image)
+          begin
+            @admin_product.images.attach(image)
+          rescue Aws::S3::Errors::Base => e
+            # Log the error details
+            Rails.logger.error "S3 Upload Error: #{e.message}"
+            # Display a user-friendly error message
+            flash[:alert] = "Image upload failed. Please check your S3 configuration."
+          end
         end
         redirect_to admin_products_path, notice: "Product updated successfully."
       else
         render :edit, status: :unprocessable_entity
       end
     end
-  end
+  end  
 
   # DELETE /admin/products/1 or /admin/products/1.json
   def destroy
