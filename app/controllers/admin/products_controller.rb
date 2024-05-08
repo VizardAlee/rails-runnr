@@ -51,6 +51,7 @@ class Admin::ProductsController < AdminController
     @admin_product = Product.find(params[:id])
     if @admin_product.update(admin_product_params.reject { |k| k['images']})
       if admin_product_params['images']
+        bucket_name = ENV['S3_BUCKET_NAME']
         admin_product_params['images'].each do |image|
           begin
             @admin_product.images.attach(image)
@@ -66,7 +67,8 @@ class Admin::ProductsController < AdminController
         render :edit, status: :unprocessable_entity
       end
     end
-  end  
+  end
+  
 
   # DELETE /admin/products/1 or /admin/products/1.json
   def destroy
